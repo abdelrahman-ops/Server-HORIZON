@@ -7,3 +7,12 @@
     jsonwebtoken
     cookie-parser
     morgan
+
+# File Structure :
+    /controllers
+    /models
+    /routes
+    /middleware
+    /config
+    /utils
+    /services
