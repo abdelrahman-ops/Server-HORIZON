@@ -5,7 +5,7 @@ import cors from "cors"
 import morgan from "morgan";
 import { errorHandler, routeNotFound } from "./middleware/errorMiddlewares.js";
 
-// import routes from "./routes/index.js";
+import routes from './routes/index.js'
 // import { dbConnection } from "./utils/index.js";
 
 // dbConnection();
@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended : true }));
 app.use(cookieParser());
 
 app.use(morgan("dev"));
-// app.use("/api" , routes);
+app.use("/api" , routes);
 
 app.use(routeNotFound);
 app.use(errorHandler);
