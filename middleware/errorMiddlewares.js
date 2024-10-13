@@ -6,15 +6,15 @@ const routeNotFound = (req, res , next) => {
 
 const errorHandler = (err , req , res , next) =>{
     let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    let messsage = err.messsage;
+    let message = err.message;
 
     if (err.name === "CastError" && err.kind === "ObjectId") {
         statusCode = 400;
-        messsage = "Resource not found";
+        message = "Resource not found";
     }
 
     req.status(statusCode).json({
-        messsage: messsage,
+        message: message,
         stack: process.env.NODE_ENV !== "production" ? null : err.stack,
     })
 }

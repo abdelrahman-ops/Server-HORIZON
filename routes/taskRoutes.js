@@ -22,6 +22,9 @@ router.post("/activity/:id", protectRoute , postTaskActivity);
 
 router.get("/" ,protectRoute , getTasks)
 router.get("/:id" ,protectRoute , getTask)
+// router.post("/create", createTask);
+// router.get("/", getTasks)
+// router.get("/:id" , getTask)
 router.get("/dashboard" , protectRoute , dashboardStatistics);
 
 
