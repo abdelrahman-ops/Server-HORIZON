@@ -22,10 +22,7 @@ router.post("/activity/:id", protectRoute , postTaskActivity);
 
 router.get("/" ,protectRoute , getTasks)
 router.get("/:id" ,protectRoute , getTask)
-// router.post("/create", createTask);
-// router.get("/", getTasks)
-// router.get("/:id" , getTask)
-router.get("/dashboard" , protectRoute , dashboardStatistics);
+router.get("/statistics/dashboard", protectRoute, dashboardStatistics);
 
 
 
@@ -34,11 +31,7 @@ router.put("/update/:id", protectRoute , updateTask);
 router.put("/:id", protectRoute , isAdminRoute , trashTask);
 
 
-router.delete(
-    "/delete-restore/:id",
-    protectRoute,
-    isAdminRoute,
-    deleteRestoreTask
-);
+router.delete("/delete-restore/:id/:actionType", protectRoute, deleteRestoreTask);
+
 
 export default router;
