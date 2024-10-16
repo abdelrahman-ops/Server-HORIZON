@@ -40,7 +40,7 @@ router.post("/create", protectRoute , isAdminRoute , createTask);
 router.post("/duplicate/:id", protectRoute , isAdminRoute , duplicateTask);
 router.post("/activity/:id", protectRoute , postTaskActivity);
 
-router.get("/" ,protectRoute , getTasks)
+router.get("/" , getTasks)
 router.get("/:id" ,protectRoute , getTask)
 router.get("/statistics/dashboard", protectRoute, dashboardStatistics);
 
