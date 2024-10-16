@@ -204,10 +204,10 @@ export const getTasks = async (req, res) => {
         }
 
         let queryResult = Task.find(query)
-        .populate({
-            path: "team",
-            select: "name title email",
-        })
+        // .populate({
+        //     path: "team",
+        //     select: "name title email",
+        // })
         .sort({_id: -1})
 
         const tasks = await queryResult;
