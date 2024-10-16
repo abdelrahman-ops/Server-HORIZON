@@ -15,6 +15,8 @@ import {
 
 const router = express.Router();
 
+
+// To access api : https://server-horizon.vercel.app/api/user/$
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);

@@ -16,6 +16,8 @@ import {
 
 const router = express.Router();
 
+
+// To access api : https://server-horizon.vercel.app/api/task/$
 router.post("/create", protectRoute , isAdminRoute , createTask);
 router.post("/duplicate/:id", protectRoute , isAdminRoute , duplicateTask);
 router.post("/activity/:id", protectRoute , postTaskActivity);
