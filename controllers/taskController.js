@@ -6,7 +6,7 @@ export const createTask = async (req, res) => {
     try {
         const { userId } = req.user;
         
-        const {title  ,stage,date , priority, assets , team } = req.body;
+        const {title  ,stage, date , priority, assets , team } = req.body;
         
         let text = "New task has been assigned to you";
         if (team?.length > 1) {
