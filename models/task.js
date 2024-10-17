@@ -7,21 +7,17 @@ const {Schema} = mongoose;
 const taskSchema = new Schema({
     
     title: {type : String , required: true },
-    
     date: {type: Date, default: new Date() },
-    
     priority: {
         type: String,
         default: "normal",
         enum: ["high" , "medium" , "normal" , "low"]
     },
-    
     stage: {
         type: String,
         default: "todo",
         enum: ["todo","inprogress","completed"]
     },
-    
     activities: [{
         type: {
             type: String,
@@ -35,14 +31,11 @@ const taskSchema = new Schema({
                 "commented"
             ],
         },
-        
         activity: String,
-        
         date: {
             type: Date,
             default : new Date()
         },
-        
         by: {type: Schema.Types.ObjectId , ref: "User"},
     },
     ],
@@ -56,7 +49,12 @@ const taskSchema = new Schema({
     
     assets: [String],
     
-    team: [{type: Schema.Types.ObjectId , ref: "User"}],
+    team: [{
+        name: String,
+        title: String,
+        email: String,
+    }],
+    // team: [{type: Schema.Types.ObjectId , ref: "User"}],
 
     isTrashed: {type: Boolean , default: false},
 
