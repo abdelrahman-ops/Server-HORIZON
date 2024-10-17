@@ -194,32 +194,31 @@ export const dashboardStatistics = async (req, res) => {
 };
 
 export const getTasks = async (req, res) => {
-    try{
-        const {stage , isTrashed} = req.query;
+    try {
+        const { stage, isTrashed } = req.query;
 
         let query = {isTrashed: isTrashed ? true : false};
 
         if (stage) {
             query.stage = stage;
         }
+        // const tasks = await Task.find(query)
+        //     .populate({
+        //         path: "team",
+        //         select: "name title email",
+        //     })
+        //     .sort({ _id: -1 });
+        
+        const tasks = await Task.find(query).sort({ _id: -1 });
 
-        let queryResult = Task.find(query)
-        // .populate({
-        //     path: "team",
-        //     select: "name title email",
-        // })
-        .sort({_id: -1})
-
-        const tasks = await queryResult;
 
         res.status(200).json({
             status: true,
             tasks,
-        })
-    }
-    catch (error) {
-        console.log(error);
-        return res.status(400).json({status: false , message : error.message });
+        });
+    } catch (error) {
+        console.log("Error in getTasks:", error);
+        return res.status(400).json({ status: false, message: error.message });
     }
 };
 
