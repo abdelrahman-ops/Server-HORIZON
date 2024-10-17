@@ -36,8 +36,8 @@ const router = express.Router();
 // router.delete("/delete-restore/:id/:actionType", protectRoute, deleteRestoreTask);
 
 
-router.post("/create", isAdminRoute , createTask);
-router.post("/duplicate/:id" , isAdminRoute , duplicateTask);
+router.post("/create" , createTask);
+router.post("/duplicate/:id"  , duplicateTask);
 router.post("/activity/:id" , postTaskActivity);
 
 router.get("/" , getTasks)
@@ -46,9 +46,9 @@ router.get("/statistics/dashboard", dashboardStatistics);
 
 
 
-router.put("/create-subtask/:id" , isAdminRoute , createSubTask)
+router.put("/create-subtask/:id" , createSubTask)
 router.put("/update/:id" , updateTask);
-router.put("/:id" , isAdminRoute , trashTask);
+router.put("/:id" , trashTask);
 
 
 router.delete("/delete-restore/:id/:actionType", deleteRestoreTask);
