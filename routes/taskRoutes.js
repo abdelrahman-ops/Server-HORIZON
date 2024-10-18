@@ -51,6 +51,6 @@ router.put("/update/:id" , updateTask);
 router.put("/:id" , trashOrRestoreTask);
 
 
-router.delete("/delete-restore/:id", deleteTask);
+router.delete("/delete/:id", deleteTask);
 
 export default router;
