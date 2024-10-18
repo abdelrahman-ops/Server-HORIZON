@@ -347,58 +347,67 @@ export const updateTask = async (req, res) => {
   }
 };
 
-export const trashTask = async (req, res) => {
-  try {
-    const { id } = req.params;
+export const trashOrRestoreTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { isTrashed } = req.body;
+    
+        const task = await Task.findById(id);
+        
+        if (!task) {
+            return res.status(404).json({
+            status: false,
+            message: "Task not found",
+            });
+        }
 
-    const task = await Task.findById(id);
+        task.isTrashed = isTrashed;
+        await task.save();
+        const action = isTrashed ? 'trashed' : 'restored';
 
-    task.isTrashed = true;
-
-    await task.save();
-
-    res.status(200).json({
-      status: true,
-      message: `Task trashed successfully.`,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json({ status: false, message: error.message });
-  }
+        res.status(200).json({
+            status: true,
+            message: `Task ${action} successfully.`,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({ status: false, message: error.message });
+    }
 };
 
+
 export const deleteRestoreTask = async (req, res) => {
-  try {
-    const { id, actionType } = req.params; // Get actionType from params
+    try {
+        const { id, actionType } = req.params; // Get actionType from params
 
-    if (actionType === "delete") {
-      await Task.findByIdAndUpdate(id, { isTrashed: true });
-    } else if (actionType === "deleteAll") {
-      await Task.updateMany({}, { isTrashed: true });
-    } else if (actionType === "restore") {
-      const resp = await Task.findByIdAndUpdate(id, { isTrashed: false });
-      if (!resp) {
+        if (actionType === "delete") {
+        await Task.findByIdAndUpdate(id, { isTrashed: true });
+        } else if (actionType === "deleteAll") {
+        await Task.updateMany({}, { isTrashed: true });
+        } else if (actionType === "restore") {
+        const resp = await Task.findByIdAndUpdate(id, { isTrashed: false });
+        if (!resp) {
+            return res
+            .status(404)
+            .json({ status: false, message: "Task not found." });
+        }
+        } else if (actionType === "restoreAll") {
+        await Task.updateMany(
+            { isTrashed: true },
+            { $set: { isTrashed: false } }
+        );
+        } else {
         return res
-          .status(404)
-          .json({ status: false, message: "Task not found." });
-      }
-    } else if (actionType === "restoreAll") {
-      await Task.updateMany(
-        { isTrashed: true },
-        { $set: { isTrashed: false } }
-      );
-    } else {
-      return res
-        .status(400)
-        .json({ status: false, message: "Invalid action type." });
-    }
+            .status(400)
+            .json({ status: false, message: "Invalid action type." });
+        }
 
-    res.status(200).json({
-      status: true,
-      message: `Operation performed successfully.`,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json({ status: false, message: error.message });
-  }
+        res.status(200).json({
+        status: true,
+        message: `Operation performed successfully.`,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({ status: false, message: error.message });
+    }
 };
