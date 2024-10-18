@@ -199,34 +199,65 @@ export const dashboardStatistics = async (req, res) => {
   }
 };
 
+// export const getTasks = async (req, res) => {
+//   try {
+//     const { stage, isTrashed } = req.query;
+
+//     let query = { isTrashed: isTrashed ? true : false };
+
+//     if (stage) {
+//       query.stage = stage;
+//     }
+//     let queryResult = Task.find(query)
+//       .populate({
+//         path: "team",
+//         select: "name title email",
+//       })
+//       .sort({ _id: -1 });
+//     const tasks = await queryResult;
+//     // const tasks = await Task.find(query).sort({ _id: -1 });
+
+//     res.status(200).json({
+//       status: true,
+//       tasks,
+//     });
+//   } catch (error) {
+//     console.log("Error in getTasks:", error);
+//     return res.status(400).json({ status: false, message: error.message });
+//   }
+// };
+
+
 export const getTasks = async (req, res) => {
-  try {
-    const { stage, isTrashed } = req.query;
-
-    let query = { isTrashed: isTrashed ? true : false };
-
-    if (stage) {
-      query.stage = stage;
+    try {
+      const { stage } = req.query;  // Removed `isTrashed` from backend filtering
+  
+      // Build the query, but don't filter by `isTrashed`
+      let query = {};
+  
+      if (stage) {
+        query.stage = stage;
+      }
+  
+      let queryResult = Task.find(query)
+        .populate({
+          path: "team",
+          select: "name title email",
+        })
+        .sort({ _id: -1 });
+  
+      const tasks = await queryResult;
+  
+      res.status(200).json({
+        status: true,
+        tasks, // Send all tasks (trashed and not trashed)
+      });
+    } catch (error) {
+      console.log("Error in getTasks:", error);
+      return res.status(400).json({ status: false, message: error.message });
     }
-    let queryResult = Task.find(query)
-      .populate({
-        path: "team",
-        select: "name title email",
-      })
-      .sort({ _id: -1 });
-    const tasks = await queryResult;
-    // const tasks = await Task.find(query).sort({ _id: -1 });
-
-    res.status(200).json({
-      status: true,
-      tasks,
-    });
-  } catch (error) {
-    console.log("Error in getTasks:", error);
-    return res.status(400).json({ status: false, message: error.message });
-  }
-};
-
+  };
+  
 export const getTask = async (req, res) => {
   try {
     const { id } = req.params;
