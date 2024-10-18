@@ -4,12 +4,12 @@ import {
     createSubTask,
     createTask,
     dashboardStatistics,
-    deleteRestoreTask,
     duplicateTask,
     getTask,
     getTasks,
     postTaskActivity,
-    trashTask,
+    trashOrRestoreTask,
+    deleteRestoreTask,
     updateTask,
 } from "../controllers/taskController.js"
 
@@ -48,7 +48,7 @@ router.get("/statistics/dashboard", dashboardStatistics);
 
 router.put("/create-subtask/:id" , createSubTask)
 router.put("/update/:id" , updateTask);
-router.put("/:id" , trashTask);
+router.put("/:id" , trashOrRestoreTask);
 
 
 router.delete("/delete-restore/:id/:actionType", deleteRestoreTask);
