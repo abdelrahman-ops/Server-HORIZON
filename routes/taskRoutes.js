@@ -36,8 +36,8 @@ const router = express.Router();
 // router.delete("/delete-restore/:id/:actionType", protectRoute, deleteRestoreTask);
 
 
-router.post("/create" , createTask);
-router.post("/duplicate/:id"  , duplicateTask);
+router.post("/create" , protectRoute, isAdminRoute , createTask);
+router.post("/duplicate/:id" , protectRoute, duplicateTask);
 router.post("/activity/:id" , postTaskActivity);
 
 router.get("/" , getTasks)

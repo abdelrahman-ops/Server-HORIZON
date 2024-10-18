@@ -5,6 +5,7 @@ import User from "../models/user.js";
 export const createTask = async (req, res) => {
     try {
         const { userId } = req.user;
+        console.log("from create task: ",req.user);
         
         const {title  ,stage, date , priority, assets , team } = req.body;
         
@@ -202,14 +203,14 @@ export const getTasks = async (req, res) => {
         if (stage) {
             query.stage = stage;
         }
-        // const tasks = await Task.find(query)
-        //     .populate({
-        //         path: "team",
-        //         select: "name title email",
-        //     })
-        //     .sort({ _id: -1 });
-        
-        const tasks = await Task.find(query).sort({ _id: -1 });
+        let queryResult = Task.find(query)
+            .populate({
+                path: 'team',
+                select: 'name title email',
+            })
+            .sort({ _id: -1 });
+        const tasks = await queryResult;
+        // const tasks = await Task.find(query).sort({ _id: -1 });
 
 
         res.status(200).json({

@@ -201,7 +201,7 @@ export const markNotificationRead = async (req, res) => {
 
 export const changeUserPassword = async (req, res) => {
     try {
-        console.log("req.user:", req.user);
+        // console.log("req.user:", req.user);
         const { userId } = req.user;
         
         

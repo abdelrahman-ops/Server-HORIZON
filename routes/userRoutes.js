@@ -25,8 +25,8 @@ router.put("/change-password", protectRoute, changeUserPassword);
 router.put("/profile", protectRoute, updateUserProfile);
 router.put("/read-noti", protectRoute, markNotificationRead);
 
-router.get("/login",protectRoute, getNotificationsList);
-router.get("/login",protectRoute, isAdminRoute ,getTeamList);
+router.get("/login/not", getNotificationsList);
+router.get("/login",  getTeamList);
 
 
 router
