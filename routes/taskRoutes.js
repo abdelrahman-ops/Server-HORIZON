@@ -9,7 +9,7 @@ import {
     getTasks,
     postTaskActivity,
     trashOrRestoreTask,
-    deleteRestoreTask,
+    deleteTask,
     updateTask,
 } from "../controllers/taskController.js"
 
@@ -51,6 +51,6 @@ router.put("/update/:id" , updateTask);
 router.put("/:id" , trashOrRestoreTask);
 
 
-router.delete("/delete-restore/:id/:actionType", deleteRestoreTask);
+router.delete("/delete-restore/:id", deleteTask);
 
 export default router;

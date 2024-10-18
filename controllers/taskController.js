@@ -376,38 +376,22 @@ export const trashOrRestoreTask = async (req, res) => {
 };
 
 
-export const deleteRestoreTask = async (req, res) => {
+export const deleteTask = async (req, res) => {
     try {
-        const { id, actionType } = req.params; // Get actionType from params
-
-        if (actionType === "delete") {
-        await Task.findByIdAndUpdate(id, { isTrashed: true });
-        } else if (actionType === "deleteAll") {
-        await Task.updateMany({}, { isTrashed: true });
-        } else if (actionType === "restore") {
-        const resp = await Task.findByIdAndUpdate(id, { isTrashed: false });
-        if (!resp) {
-            return res
-            .status(404)
-            .json({ status: false, message: "Task not found." });
+        const { id } = req.params;
+    
+        const task = await Task.findByIdAndDelete(id);
+    
+        if (!task) {
+            return res.status(404).json({ status: false, message: "Task not found." });
         }
-        } else if (actionType === "restoreAll") {
-        await Task.updateMany(
-            { isTrashed: true },
-            { $set: { isTrashed: false } }
-        );
-        } else {
-        return res
-            .status(400)
-            .json({ status: false, message: "Invalid action type." });
-        }
-
+    
         res.status(200).json({
-        status: true,
-        message: `Operation performed successfully.`,
+            status: true,
+            message: "Task deleted permanently.",
         });
     } catch (error) {
-        console.log(error);
+        console.log("Error in deleteTask:", error);
         return res.status(400).json({ status: false, message: error.message });
     }
 };
