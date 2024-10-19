@@ -29,7 +29,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
-      "https://horizon-task-app.netlify.app",
+      "https://horizon-task-manager-app.netlify.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
