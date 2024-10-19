@@ -30,6 +30,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:3001",
       "https://horizon-task-manager-app.netlify.app",
+      "https://horizon-task-manager-client.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
