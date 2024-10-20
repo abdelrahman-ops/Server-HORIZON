@@ -9,7 +9,7 @@ export const createTask = async (req, res) => {
 
     const { title, stage, date, priority, assets, team } = req.body;
 
-    let text = "New task has been assigned to you";
+    let text = "New task has been assigned to you ";
     if (team?.length > 1) {
       text = text + `and ${team?.length - 1} others.`;
     }
@@ -17,7 +17,7 @@ export const createTask = async (req, res) => {
     text =
       text +
       `The task priority is set a ${priority} priority, so check and act accordingly. 
-                The task date is ${new Date(date).toDateString()}. Thankyou!!!`;
+      The task date is ${new Date(date).toDateString()}. Thankyou!`;
 
     const activity = {
       type: "assigned",

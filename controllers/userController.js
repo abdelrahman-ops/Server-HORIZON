@@ -1,5 +1,3 @@
-// Ali + Abdelrahman + Ahmed
-
 // import multer from 'multer';
 import { response } from "express";
 
@@ -88,8 +86,8 @@ export const loginUser = async (req, res) => {
                 user,
                 token
             },
-            
         });
+        console.log(user," : login user data sent");
 
     } catch (error) {
         console.log(error);
