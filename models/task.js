@@ -5,7 +5,6 @@ const {Schema} = mongoose;
 
 // title , date , priority , stage (progress) , activities , subtasks , assets , team , isTrashed
 const taskSchema = new Schema({
-    
     title: {type : String , required: true },
     date: {type: Date, default: new Date() },
     priority: {

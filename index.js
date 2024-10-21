@@ -5,7 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 
 import { errorHandler, routeNotFound } from "./middleware/errorMiddlewares.js";
-import { limiter } from './middleware/limiterMiddleware.js';
+// import { limiter } from './middleware/limiterMiddleware.js';
 import routes from "./routes/index.js";
 import dbConnection from "./config/db.js";
 
@@ -49,7 +49,7 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 
 // Handle rate limit
-app.use(limiter);
+// app.use(limiter);
 
 // handle image
 app.use("/images", express.static(join(__dirname, "public/images")));

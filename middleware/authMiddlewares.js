@@ -6,8 +6,6 @@ const protectRoute = async (req, res, next) => {
   try {
     let token = req.headers.authorization.split(" ")[1];
 
-    console.log(token, "toooken");
-
     if (token) {
       try {
         // Verify the token
@@ -15,9 +13,7 @@ const protectRoute = async (req, res, next) => {
         console.log("Decoded token:", decodedToken); // Verify token contents
 
         // Fetch user details using decodedToken.userId (correct field)
-        const resp = await User.findById(decodedToken.userId).select(
-          "isAdmin email"
-        );
+        const resp = await User.findById(decodedToken.userId).select("isAdmin email");
 
         if (!resp) {
           return res

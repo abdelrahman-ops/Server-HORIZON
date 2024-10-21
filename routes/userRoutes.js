@@ -1,6 +1,6 @@
 import express from "express" ;
 import {isAdminRoute, protectRoute } from "../middleware/authMiddlewares.js";
-import { limiter } from "../middleware/limiterMiddleware.js";
+
 import {
     activateUserProfile,
     changeUserPassword,
@@ -18,8 +18,8 @@ const router = express.Router();
 
 
 // To access api : https://server-horizon.vercel.app/api/user/$
-router.post("/register",limiter, registerUser);
-router.post("/login",limiter, loginUser);
+router.post("/register", registerUser);
+router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 
 router.put("/change-password", protectRoute, changeUserPassword);
