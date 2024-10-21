@@ -27,7 +27,7 @@ router.put("/profile", protectRoute, updateUserProfile);
 router.put("/read-noti", protectRoute, markNotificationRead);
 
 router.get("/login/not", getNotificationsList);
-router.get("/team-list",  getTeamList);
+router.get("/login",  getTeamList);
 
 
 router
