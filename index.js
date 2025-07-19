@@ -4,27 +4,41 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 
+// Middleware imports
 import { errorHandler, routeNotFound } from "./middleware/errorMiddlewares.js";
 // import { limiter } from './middleware/limiterMiddleware.js';
+
+// Route and configuration imports
 import routes from "./routes/index.js";
 import dbConnection from "./config/db.js";
+import setupSwaggerDocs from "./swagger.js";
 
+// Path utilities for ES modules
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
-// Establish database connection
+/**
+ * Initialize Express Application
+ * 
+ * This sets up the backend server with middleware, routes,
+ * database connection, and error handling.
+ */
+
+// 1. Database Connection
 dbConnection();
 
-// Create express app instance
+// 2. Express App Initialization
 const app = express();
 
-// Get __dirname for ES modules
+// 3. Get __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-        // Middleware setup
+// ======================
+// MIDDLEWARE CONFIGURATION
+// ======================
 
-// Enable CORS for specific origins and methods
+// CORS Configuration
 app.use(
     cors({
         origin: [
@@ -38,38 +52,59 @@ app.use(
     })
 );
 
-// Parse JSON and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Request Parsing Middleware
+app.use(express.json());          // For parsing application/json
+app.use(express.urlencoded({ extended: true }));  // For parsing application/x-www-form-urlencoded
+app.use(cookieParser());          // For parsing cookies
 
-// Parse cookies
-app.use(cookieParser());
+// Development Logger
+app.use(morgan("dev"));           // HTTP request logger
 
-// Log HTTP requests
-app.use(morgan("dev"));
-
-// Handle rate limit
+// Rate Limiter (commented out by default)
 // app.use(limiter);
 
-// handle image
+// ======================
+// STATIC FILE HANDLING
+// ======================
 app.use("/images", express.static(join(__dirname, "public/images")));
 app.use("/public/images", express.static("public/images"));
 
-// API routes
-app.use("/api", routes);
+// ======================
+// ROUTE CONFIGURATION
+// ======================
 
-// Handle errors
-app.use(routeNotFound);
-app.use(errorHandler);
-
-// Basic route to check server setup
+// Health Check Route (Basic Route)
 app.get("/", (req, res) => {
-    res.send("Server is up and running");
+    res.status(200).json({
+        status: "success",
+        message: "Server is up and running",
+        timestamp: new Date().toISOString()
+    });
 });
 
-// Define the port and start the server
+// API Documentation Route
+app.get("/docs", (req, res) => {
+    res.redirect("/api-docs");
+});
+
+// Main API Routes (versioned under /api)
+app.use("/api", routes);
+
+// Swagger Documentation Setup
+setupSwaggerDocs(app);
+
+// ======================
+// ERROR HANDLING
+// ======================
+app.use(routeNotFound);   // Handle 404 routes
+app.use(errorHandler);    // Custom error handler
+
+// ======================
+// SERVER INITIALIZATION
+// ======================
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`API documentation available at http://localhost:${PORT}/api-docs`);
 });

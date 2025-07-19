@@ -1,0 +1,88 @@
+paths:
+  /notice:
+    get:
+      tags: [Notifications]
+      summary: Get user notifications
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: List of notifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoticeResponse'
+        401:
+          description: Unauthorized
+
+  /notice/read:
+    post:
+      tags: [Notifications]
+      summary: Mark notification as read
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                noticeId:
+                  type: string
+                  format: uuid
+              required: [noticeId]
+      responses:
+        200:
+          description: Notification marked as read
+        404:
+          description: Notification not found
+
+components:
+  schemas:
+    Notice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "60d21b4667d0d8992e610c87"
+        team:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["60d21b4667d0d8992e610c85"]
+        text:
+          type: string
+          example: "New task assigned"
+        task:
+          type: string
+          format: uuid
+          example: "60d21b4667d0d8992e610c86"
+        notiType:
+          type: string
+          enum: [alert, message]
+          default: "alert"
+        isRead:
+          type: array
+          items:
+            type: string
+            format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    NoticeResponse:
+      type: object
+      properties:
+        notices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notice'
+        count:
+          type: integer
+          example: 3

@@ -1,0 +1,176 @@
+paths:
+  /task:
+    get:
+      tags: [Tasks]
+      summary: Get all tasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: stage
+          schema:
+            type: string
+            enum: [todo, in-progress, completed]
+          description: Filter tasks by stage
+      responses:
+        200:
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        401:
+          description: Unauthorized
+
+  /task/{id}:
+    get:
+      tags: [Tasks]
+      summary: Get a specific task
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Task ID
+      responses:
+        200:
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        404:
+          description: Task not found
+
+  /task/create:
+    post:
+      tags: [Tasks]
+      summary: Create a new task
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreate'
+            example:
+              title: "Implement authentication"
+              priority: "high"
+              stage: "todo"
+              team: ["60d21b4667d0d8992e610c85"]
+      responses:
+        201:
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        400:
+          description: Invalid input
+
+components:
+  schemas:
+    Task:
+      type: object
+      required: [title]
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "60d21b4667d0d8992e610c86"
+        title:
+          type: string
+          example: "Implement authentication"
+        date:
+          type: string
+          format: date-time
+          example: "2023-07-20T12:00:00Z"
+        priority:
+          type: string
+          enum: [high, medium, normal, low]
+          default: "normal"
+        stage:
+          type: string
+          enum: [todo, in-progress, completed]
+          default: "todo"
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+        subTasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubTask'
+        assets:
+          type: array
+          items:
+            type: string
+          example: ["image1.jpg", "document.pdf"]
+        team:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["60d21b4667d0d8992e610c85"]
+        isTrashed:
+          type: boolean
+          default: false
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    TaskCreate:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+        priority:
+          type: string
+        stage:
+          type: string
+        team:
+          type: array
+          items:
+            type: string
+            format: uuid
+        assets:
+          type: array
+          items:
+            type: string
+
+    Activity:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [assigned, started, inprogress, bug, completed, commented]
+        activity:
+          type: string
+        date:
+          type: string
+          format: date-time
+        by:
+          type: string
+          format: uuid
+
+    SubTask:
+      type: object
+      properties:
+        title:
+          type: string
+        date:
+          type: string
+          format: date-time
+        tag:
+          type: string
