@@ -1,8 +1,13 @@
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const loadYaml = (file) => YAML.load(path.join(process.cwd(), 'swagger', file));
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const loadYaml = (file) => YAML.load(path.join(__dirname, 'swagger', file));
 
 const taskDoc = loadYaml('task.yaml');
 const userDoc = loadYaml('user.yaml');
@@ -84,10 +89,37 @@ const swaggerDocument = {
 };
 
 const setupSwaggerDocs = (app) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  // Serve Swagger UI with custom options
+  const options = {
+    customSiteTitle: "Horizon Task Manager API Docs",
+    customCss: '.swagger-ui .topbar { display: none }',
+    customfavIcon: '/public/favicon.ico',
+    explorer: true
+  };
+
+  // Serve Swagger UI at /api-docs
+  app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    (req, res, next) => {
+      // Ensure proper content type for Swagger UI assets
+      if (req.path.endsWith('.css') || req.path.endsWith('.js')) {
+        res.setHeader('Content-Type', 'text/css');
+      }
+      next();
+    },
+    swaggerUi.setup(swaggerDocument, options)
+  );
+
+  // Serve Swagger JSON
   app.get('/api-docs.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerDocument);
+  });
+
+  // Redirect from /docs to /api-docs
+  app.get('/docs', (req, res) => {
+    res.redirect('/api-docs');
   });
 };
 
