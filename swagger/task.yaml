@@ -1,81 +1,17 @@
-paths:
-  /task:
-    get:
-      tags: [Tasks]
-      summary: Get all tasks
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: query
-          name: stage
-          schema:
-            type: string
-            enum: [todo, in-progress, completed]
-          description: Filter tasks by stage
-      responses:
-        200:
-          description: List of tasks
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Task'
-        401:
-          description: Unauthorized
-
-  /task/{id}:
-    get:
-      tags: [Tasks]
-      summary: Get a specific task
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: Task ID
-      responses:
-        200:
-          description: Task details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Task'
-        404:
-          description: Task not found
-
-  /task/create:
-    post:
-      tags: [Tasks]
-      summary: Create a new task
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TaskCreate'
-            example:
-              title: "Implement authentication"
-              priority: "high"
-              stage: "todo"
-              team: ["60d21b4667d0d8992e610c85"]
-      responses:
-        201:
-          description: Task created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Task'
-        400:
-          description: Invalid input
-
+openapi: 3.0.0
+info:
+  title: Task API - Task Horizon
+  version: 1.0.0
+  description: API endpoints for managing tasks in Task Horizon
+servers:
+  - url: https://server-horizon.vercel.app
+    description: Live server
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Task:
       type: object
@@ -137,8 +73,10 @@ components:
           type: string
         priority:
           type: string
+          enum: [high, medium, normal, low]
         stage:
           type: string
+          enum: [todo, in-progress, completed]
         team:
           type: array
           items:
@@ -174,3 +112,80 @@ components:
           format: date-time
         tag:
           type: string
+
+paths:
+  /task:
+    get:
+      tags: [Tasks]
+      summary: Get all tasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: stage
+          schema:
+            type: string
+            enum: [todo, in-progress, completed]
+          description: Filter tasks by stage
+      responses:
+        '200':
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized
+
+  /task/{id}:
+    get:
+      tags: [Tasks]
+      summary: Get a specific task
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Task ID
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Task not found
+
+  /task/create:
+    post:
+      tags: [Tasks]
+      summary: Create a new task
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreate'
+            example:
+              title: "Implement authentication"
+              priority: "high"
+              stage: "todo"
+              team: ["60d21b4667d0d8992e610c85"]
+      responses:
+        '201':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid input

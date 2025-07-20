@@ -1,3 +1,9 @@
+openapi: 3.0.0
+info:
+  title: Notifications API
+  version: 1.0.0
+  description: API for handling user notifications
+
 paths:
   /notice:
     get:
@@ -39,6 +45,12 @@ paths:
           description: Notification not found
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     Notice:
       type: object

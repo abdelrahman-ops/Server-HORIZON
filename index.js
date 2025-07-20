@@ -87,6 +87,10 @@ app.get("/docs", (req, res) => {
     res.redirect("/api-docs");
 });
 
+app.get('/api/docs', (req, res) => {
+    res.redirect('/api-docs');
+});
+
 // Main API Routes (versioned under /api)
 app.use("/api", routes);
 
